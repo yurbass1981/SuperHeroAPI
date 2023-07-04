@@ -49,5 +49,20 @@ namespace SuperHeroAPI.Controllers
             superHeroes.Add(hero);
             return Ok(superHeroes);
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<List<SuperHero>>> UpdateHero(int id, SuperHero request)
+        {
+            var hero = superHeroes.Find(x => x.Id == id);
+            if (hero == null)
+                return NotFound("Sorry, but this hero doesn't exist.");
+
+            hero.FirstName = request.FirstName;
+            hero.LastName = request.LastName;
+            hero.Name = request.Name;
+            hero.Place = request.Place;
+
+            return Ok(superHeroes);
+        }
     }
 }
