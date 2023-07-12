@@ -22,40 +22,50 @@
                 }
         };
 
-        public List<SuperHero> AddHero(SuperHero hero)
+        private readonly DataContext _context;
+
+        public SuperHeroService(DataContext context)
         {
-            superHeroes.Add(hero);
+            _context = context;
+        }
+
+        public async Task<List<SuperHero>> AddHero(SuperHero hero)
+        {
+            _context.SuperHeroes.Add(hero);
+            await _context.SaveChangesAsync();
             return superHeroes;
         }
 
-        public List<SuperHero>? DeleteHero(int id)
+        public async Task<List<SuperHero>?> DeleteHero(int id)
         {
-            var hero = superHeroes.Find(x => x.Id == id);
+            var hero = await _context.SuperHeroes.FindAsync(id);
             if (hero == null)
                 return null;
 
-            superHeroes.Remove(hero);
+            _context.SuperHeroes.Remove(hero);
+            await _context.SaveChangesAsync();
 
             return superHeroes;
         }
 
-        public List<SuperHero> GetAllHeroes()
+        public async Task<List<SuperHero>> GetAllHeroes()
         {
-            return superHeroes;
+            var heroes = await _context.SuperHeroes.ToListAsync();
+            return heroes;
         }
 
-        public SuperHero GetSingleHero(int id)
+        public async Task<SuperHero?> GetSingleHero(int id)
         {
-            var hero = superHeroes.Find(x => x.Id == id);
+            var hero = await _context.SuperHeroes.FindAsync(id);
             if (hero == null)
                 return null;
 
             return hero;
         }
 
-        public List<SuperHero>? UpdateHero(int id, SuperHero request)
+        public async Task<List<SuperHero>?> UpdateHero(int id, SuperHero request)
         {
-            var hero = superHeroes.Find(x => x.Id == id);
+            var hero = await _context.SuperHeroes.FindAsync(id);
             if (hero == null)
                 return null;
 
@@ -63,6 +73,8 @@
             hero.LastName = request.LastName;
             hero.Name = request.Name;
             hero.Place = request.Place;
+
+            _context.SaveChangesAsync();
 
             return superHeroes;
         }
