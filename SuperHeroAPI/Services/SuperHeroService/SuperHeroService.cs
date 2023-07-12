@@ -2,26 +2,6 @@
 {
     public class SuperHeroService : ISuperHeroService
     {
-        public static List<SuperHero> superHeroes = new() 
-        {
-                new SuperHero
-                {
-                    Id = 1,
-                    Name = "Spider Man",
-                    FirstName = "Peter",
-                    LastName = "Parker",
-                    Place = "New York City"
-                },
-                new SuperHero
-                {
-                    Id = 2,
-                    Name = "Iron Man",
-                    FirstName = "Tony",
-                    LastName = "Stark",
-                    Place = "Malibu"
-                }
-        };
-
         private readonly DataContext _context;
 
         public SuperHeroService(DataContext context)
@@ -33,7 +13,7 @@
         {
             _context.SuperHeroes.Add(hero);
             await _context.SaveChangesAsync();
-            return superHeroes;
+            return await _context.SuperHeroes.ToListAsync();
         }
 
         public async Task<List<SuperHero>?> DeleteHero(int id)
@@ -45,7 +25,7 @@
             _context.SuperHeroes.Remove(hero);
             await _context.SaveChangesAsync();
 
-            return superHeroes;
+            return await _context.SuperHeroes.ToListAsync();
         }
 
         public async Task<List<SuperHero>> GetAllHeroes()
@@ -74,9 +54,9 @@
             hero.Name = request.Name;
             hero.Place = request.Place;
 
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            return superHeroes;
+            return await _context.SuperHeroes.ToListAsync();
         }
     }
 }
