@@ -14,5 +14,7 @@ namespace SuperHeroAPI.Data
             base.OnConfiguring(optionsBuilder);
             optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=superherodb;Trusted_Connection=true;TrustServerCertificate=true;");
         }
+
+        public DbSet<SuperHero> SuperHeroes { get; set; }
     }
 }
